@@ -1,25 +1,35 @@
 html {
-    var(accent): #0071ff;
-    var(button): #2C8CFF;
-    var(gray-bg): #eee;
-    var(bg): white;
-    var(border): #ccc;
-    var(hover-border): #999;
-    var(text): #222;
-    var(placeholder): #aaa;
-    var(lighter-text): #888;
-    var(light-text): #666;
-    var(menu-hover): #D7E4F2;
-    var(dark-red): #A72145;
-    var(dark-yellow): #FBC732;
-    var(dark-blue): #2E2459;
-    var(green-blue): #197260;
-    var(gray-blue): #2B3439;
-    var(blue-green): #4299bf;
-    var(light-green): #D4EAB7;
-    var(dark-green): #5CB85C;
-    var(blood-red): #F82600;
-    var(gray-bg-osx): rgba(238, 238, 238, 0.75);
+    var(accent): #ec4899;        /* Hồng chính */
+    var(button): #f472b6;        /* Hồng nút */
+
+    var(gray-bg): #fdf2f8;       /* Nền hồng rất nhạt */
+    var(bg): #fff0f6;            /* Nền chính hồng nhẹ */
+
+    var(border): #fbcfe8;        /* Viền hồng nhạt */
+    var(hover-border): #ec4899;
+
+    var(text): #831843;          /* Hồng đậm (dễ đọc) */
+    var(placeholder): #f9a8d4;
+    var(lighter-text): #db2777;
+    var(light-text): #be185d;
+
+    var(menu-hover): #fce7f3;    /* Hover nhẹ */
+
+    var(dark-red): #be123c;      /* giữ nguyên nếu cần cảnh báo */
+    var(dark-yellow): #f59e0b;
+
+    var(dark-blue): #be185d;     /* đổi sang hồng đậm */
+    var(green-blue): #db2777;
+
+    var(gray-blue): #9d174d;
+    var(blue-green): #ec4899;
+
+    var(light-green): #fce7f3;   /* thay bằng hồng nhạt */
+    var(dark-green): #db2777;
+
+    var(blood-red): #be185d;
+
+    var(gray-bg-osx): rgba(255, 240, 246, 0.8);
 }
 
 html.darktheme {

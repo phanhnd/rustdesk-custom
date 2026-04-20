@@ -1522,6 +1522,7 @@ function login() {
     msgbox("custom-login", translate('Login'), <div .form .set-password> 
             <div><span>{translate('Username')}:</span><input|text name="username" value={name0} .outline-focus /></div> 
             <div><span>{translate('Password')}:</span><PasswordComponent value={pass0} /></div> 
+            <div style="margin-top: 0.5em; text-align: right;"><span .link #sso-login>{translate('Single Sign On')}</span></div>
         </div>, "", function(res=null, show_progress) {
         if (!res) return;
         show_progress();
@@ -1677,4 +1678,8 @@ function getHttpHeaders() {
 
 function getDeviceInfo() {
     return JSON.parse(handler.get_login_device_info());
+}
+
+event click $(span#sso-login) {
+    handler.open_url("http://localhost:8080/");
 }
