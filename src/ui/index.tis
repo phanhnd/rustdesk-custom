@@ -1377,6 +1377,9 @@ function self.closing() {
 }
 
 function self.ready() {
+    var s = handler.hello_from_rust("RustDesk");
+    stdout.println(s)
+
     var r = handler.get_size();
     if (isReasonableSize(r) && r[2] > 0) {
         var (sx, sy, sw, sh) = view.screenBox(#workarea, #rectw);

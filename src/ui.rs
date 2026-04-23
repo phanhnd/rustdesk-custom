@@ -196,6 +196,13 @@ pub fn start(args: &mut [String]) {
 struct UI {}
 
 impl UI {
+
+    //test23.04
+    fn hello_from_rust(&self, name: String) -> String (
+        format!("Hello {name} from Rust!")
+    )
+
+
     fn recent_sessions_updated(&self) -> bool {
         recent_sessions_updated()
     }
@@ -716,6 +723,10 @@ impl UI {
 
 impl sciter::EventHandler for UI {
     sciter::dispatch_script_call! {
+
+        //test23.04
+        fn hello_from_rust(String);
+
         fn t(String);
         fn get_api_server();
         fn is_xfce();
