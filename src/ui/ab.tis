@@ -1,5 +1,29 @@
 var selectTags = [];
 var ab = { tags: [], peers: [] };
+
+//test
+var virtualAbDb = {
+    tags: ["team-a", "team-b", "windows", "linux"],
+    peers: [
+        {
+            id: "100001001",
+            username: "admin",
+            hostname: "PC-WIN-01",
+            platform: "Windows",
+            alias: "May Windows 01",
+            tags: ["team-a", "windows"]
+        },
+        {
+            id: "100001002",
+            username: "root",
+            hostname: "PC-LINUX-01",
+            platform: "Linux",
+            alias: "May Linux 01",
+            tags: ["team-b", "linux"]
+        }
+    ]
+};
+
 var abLoading;
 var abError;
 var current_menu_peer_id = '';
@@ -15,9 +39,11 @@ class AddressBook: Reactor.Component
     }();
     
     function render() {
-        if (!handler.get_local_option("access_token")) {
-            return <div style="margin: *"><div #login-link .link style="margin: *; width: 100px; text-align: center; font-size: 1.2em;">{translate("Login")}</div></div>;
-        }
+        //test 23.04
+
+        //if (!handler.get_local_option("access_token")) {
+        //    return <div style="margin: *"><div #login-link .link style="margin: *; width: 100px; text-align: center; font-size: 1.2em;">{translate("Login")}</div></div>;
+        //}
         if (abLoading) {
             return <div style="margin: *"><progress style="color: #0071ff" /></div>;
         } else if (abError) {
@@ -647,28 +673,43 @@ function getAb() {
     abLoading = true;
     abError = "";
     app.update();
-    httpRequest(handler.get_api_server() + "/api/ab/get", #post, {}, function(data) {
-        if (data) {
-            if (data.error) {
-                handleAbError(data.error);
-                return;
-            }
-            var tm = data.updated_at;
-            ab = JSON.parse(data.data);
-            if (!ab.tags) ab.tags = [];
-            if (!ab.peers) ab.peers = [];
-        }
+    //test 23.04
+    self.timer(50ms, function() {
+        ab = JSON.parse(JSON.stringify(virtualAbDb));
+        if (!ab.tags) ab.tags = [];
+        if (!ab.peers) ab.peers = [];
         abLoading = false;
         app.update();
-    }, function(err, status) {
-        handleAbError(err);
-    }, getHttpHeaders());
+    });
+
+
+    //httpRequest(handler.get_api_server() + "/api/ab/get", #post, {}, function(data) {
+    //    if (data) {
+    //        if (data.error) {
+    //            handleAbError(data.error);
+    //            return;
+    //        }
+    //        var tm = data.updated_at;
+    //        ab = JSON.parse(data.data);
+    //        if (!ab.tags) ab.tags = [];
+    //        if (!ab.peers) ab.peers = [];
+    //    }
+    //    abLoading = false;
+    //    app.update();
+    //}, function(err, status) {
+    //    handleAbError(err);
+    //}, getHttpHeaders());
 }
 
+//test 23.04
+//function updateAb() {
+//    httpRequest(handler.get_api_server() + "/api/ab", #post, { data: JSON.stringify(ab) }, function(data) {
+//    }, function(err, status) {
+//    }, getHttpHeaders());
+//}
+
 function updateAb() {
-    httpRequest(handler.get_api_server() + "/api/ab", #post, { data: JSON.stringify(ab) }, function(data) {
-    }, function(err, status) {
-    }, getHttpHeaders());
+    virtualAbDb = JSON.parse(JSON.stringify(ab));
 }
 
 function resetAb() {
