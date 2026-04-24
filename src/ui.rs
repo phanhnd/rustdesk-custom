@@ -197,6 +197,10 @@ struct UI {}
 
 impl UI {
 
+    fn get_login_device_info(&mut self) {
+        println!("Not implemented yet");
+    }
+
     //test23.04
     fn hello_from_rust(&self, name: String) -> String (
         format!("Hello {name} from Rust!")
