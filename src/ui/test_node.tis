@@ -1,0 +1,80 @@
+// test_node.tis - Tối ưu cho kết nối RustDesk <-> Node.js
+stdout.println("=== Test Module Loaded ===");
+
+// Đảm bảo view.handler (hoặc globalHandler) trỏ đúng vào handler của bạn
+var h = view.handler || handler; 
+
+function createTestButton() {
+    var btn = new Element("div");
+    btn.attributes["id"] = "test-node-btn";
+    btn.text = "🔌 Test Node.js";
+    
+    // Style (Giữ nguyên của bạn vì đã đẹp)
+    btn.style["position"] = "fixed";
+    btn.style["right"] = "20px";
+    btn.style["bottom"] = "20px";
+    btn.style["background-color"] = "#0071ff";
+    btn.style["color"] = "white";
+    btn.style["padding"] = "10px 20px";
+    btn.style["border-radius"] = "5px";
+    btn.style["cursor"] = "pointer";
+    btn.style["z-index"] = "99999";
+    btn.style["font-weight"] = "bold";
+    
+    btn.on("click", function() {
+        testNodeJS();
+    });
+    
+    var body = self.select("body");
+    if (body) body.append(btn); else self.append(btn);
+    stdout.println("Button added to DOM");
+}
+
+function testNodeJS() {
+    var btn = self.select("#test-node-btn");
+    var originalText = "🔌 Test Node.js";
+    
+    btn.text = "⏳ Đang kết nối...";
+    btn.style["background-color"] = "#ffa500";
+    btn.style["cursor"] = "wait";
+    
+    // Chú ý: Port 4000 phải khớp với Node.js của bạn
+    var url = "http://127.0.0.1:4000/api/test"; 
+    stdout.println("Calling Rust handler for: " + url);
+    
+    // Gọi hàm Rust
+    h.test_get_request(url);
+    
+    var attempts = 0;
+    var maxAttempts = 100; // Tăng lên một chút vì mạng có thể chậm
+
+    function pollResult() {
+        attempts++;
+        var rawResult = h.get_test_async_job_status();
+        
+        // Kiểm tra các trạng thái trung gian mà Rust ghi vào biến Global
+        // Nếu là "Processing..." hoặc " " (đang đợi) thì tiếp tục đợi
+        if ((rawResult == "Processing..." || rawResult == " " || rawResult == "") && attempts < maxAttempts) {
+            self.timer(200, pollResult); // Kiểm tra mỗi 200ms
+        } else {
+            // Đã có kết quả cuối cùng hoặc Timeout
+            btn.text = originalText;
+            btn.style["background-color"] = "#0071ff";
+            btn.style["cursor"] = "pointer";
+            
+            if (rawResult && rawResult != "Processing..." && rawResult != " " && rawResult != "") {
+                view.msgbox(#information, rawResult, "Kết quả từ Node.js");
+            } else {
+                view.msgbox(#warning, "Không nhận được phản hồi hoặc quá thời gian!", "Lỗi kết nối");
+            }
+        }
+    }
+    
+    // Bắt đầu vòng lặp kiểm tra
+    self.timer(200, pollResult);
+}
+
+// Khởi tạo button sau khi UI load xong
+self.ready = function() {
+    createTestButton();
+}
